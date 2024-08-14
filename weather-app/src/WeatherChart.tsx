@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Line } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
+import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, PointElement, LinearScale, CategoryScale } from 'chart.js';
+
+ChartJS.register(Title, Tooltip, Legend, LineElement, PointElement, LinearScale, CategoryScale);
 
 interface WeatherData {
   timestamp: string;
@@ -41,31 +44,70 @@ const WeatherChart: React.FC = () => {
     return () => clearInterval(intervalId);
   }, []);
 
+  // Format x-axis labels to include city and country
+  const labels = weatherData.map((data) => `${data.city}, ${data.country}`);
+
   const chartData = {
-    labels: weatherData.map((data) => `${data.city}, ${data.country}`),
+    labels: labels,
     datasets: [
       {
         label: 'Min Temp',
-        data: weatherData.map((data) => data.minTemp),
+        data: weatherData.map((data) => ({ x: `${data.city}, ${data.country}`, y: Math.round((data.minTemp - 273.15)*100)/100, timestamp: data.timestamp })),
         borderColor: 'blue',
         backgroundColor: 'lightblue',
-        fill: false,
       },
       {
         label: 'Max Temp',
-        data: weatherData.map((data) => data.maxTemp),
+        data: weatherData.map((data) => ({ x: `${data.city}, ${data.country}`, y: Math.round((data.maxTemp - 273.15)*100)/100, timestamp: data.timestamp })),
         borderColor: 'red',
         backgroundColor: 'lightcoral',
-        fill: false,
       },
     ],
+  };
+
+  const options = {
+    plugins: {
+      tooltip: {
+        callbacks: {
+          title: function (tooltipItems: any[]) {
+            // Return the timestamp as part of the tooltip title
+            return `Timestamp: ${new Date(tooltipItems[0].raw.timestamp).toUTCString()}`;
+          },
+          label: function (tooltipItem: any) {
+            // Return the temperature and label
+            const { dataset } = tooltipItem;
+            const value = tooltipItem.raw.y;
+            const label = dataset.label;
+            return `${label}: ${value}°C`;
+          }
+        },
+      },
+    },
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: 'City, Country'
+        },
+        ticks: {
+          autoSkip: true,
+          maxTicksLimit: 6, // Limit the number of ticks on the x-axis to avoid clutter
+        },
+      },
+      y: {
+        title: {
+          display: true,
+          text: 'Temperature (°C)'
+        },
+      },
+    },
   };
 
   return (
     <div>
       <h2>Latest Weather Data</h2>
       {error && <p>{error}</p>}
-      <Line data={chartData} />
+      <Bar data={chartData} options={options} />
     </div>
   );
 };
