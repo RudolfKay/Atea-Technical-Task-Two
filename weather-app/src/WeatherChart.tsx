@@ -6,6 +6,7 @@ import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, PointElement, Li
 ChartJS.register(Title, Tooltip, Legend, LineElement, PointElement, LinearScale, CategoryScale);
 
 interface WeatherRecord {
+  id: string;
   timestamp: string;
   country: string;
   city: string;

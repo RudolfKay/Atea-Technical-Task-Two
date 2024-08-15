@@ -4,16 +4,19 @@ using System.Text.Json;
 
 namespace Atea.Task2.Services
 {
-    public class WeatherService
+    public interface IWeatherService
     {
-        private readonly HttpClient _httpClient;
+        Task PollWeatherData(List<(string Country, string City, double Lat, double Lon)> locations, CancellationToken cancellationToken);
+    }
+
+    public class WeatherService : IWeatherService
+    {
         private readonly string _apiKey;
         private readonly ILogger<WeatherService> _logger;
         private readonly WeatherDbContext _context;
 
-        public WeatherService(HttpClient httpClient, IConfiguration config, ILogger<WeatherService> logger, WeatherDbContext context)
+        public WeatherService(IConfiguration config, ILogger<WeatherService> logger, WeatherDbContext context)
         {
-            _httpClient = httpClient;
             _apiKey = config["WeatherApi:ApiKey"];
             _logger = logger;
             _context = context;
@@ -39,8 +42,9 @@ namespace Atea.Task2.Services
 
         private async Task<WeatherResponse> GetWeatherDataAsync(double lat, double lon)
         {
+            using var httpClient = new HttpClient();
             var url = $"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={_apiKey}";
-            var response = await _httpClient.GetAsync(url);
+            var response = await httpClient.GetAsync(url);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -61,6 +65,7 @@ namespace Atea.Task2.Services
 
             var weatherRecord = new WeatherRecord
             {
+                Id = Guid.NewGuid(),
                 Timestamp = DateTime.UtcNow,
                 Country = country,
                 City = city,
