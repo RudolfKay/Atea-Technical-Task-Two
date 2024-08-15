@@ -10,7 +10,6 @@ namespace Atea.Task2.Controllers
     {
         private readonly WeatherDbContext _context;
 
-        // Inject the database context
         public WeatherController(WeatherDbContext context)
         {
             _context = context;
@@ -19,8 +18,6 @@ namespace Atea.Task2.Controllers
         [HttpGet("latest")]
         public async Task<IActionResult> GetLatestWeatherData()
         {
-            // This possibly needs to be a separate function. Needs to be refactored to take ALL data in database, group by city,
-            // but return one record for each 6 cities where tempMin is all-time low temp and tempHigh is all-time high temp from all available data for that city
             try
             {
                 // Retrieve the latest 6 weather data entries, ordered by timestamp (descending)
