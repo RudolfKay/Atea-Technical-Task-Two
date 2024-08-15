@@ -1,4 +1,4 @@
-﻿using Atea.Task2.Services;
+﻿namespace Atea.Task2.Services;
 
 public class WeatherPollingJob : BackgroundService
 {

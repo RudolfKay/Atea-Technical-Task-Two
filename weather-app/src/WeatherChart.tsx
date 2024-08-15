@@ -5,16 +5,18 @@ import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, PointElement, Li
 
 ChartJS.register(Title, Tooltip, Legend, LineElement, PointElement, LinearScale, CategoryScale);
 
-interface WeatherData {
+interface WeatherRecord {
   timestamp: string;
   country: string;
   city: string;
   minTemp: number;
   maxTemp: number;
+  currentTemp: number;
+  humidity: number;
 }
 
 const WeatherChart: React.FC = () => {
-  const [weatherData, setWeatherData] = useState<WeatherData[]>([]);
+  const [weatherData, setWeatherData] = useState<WeatherRecord[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   // Function to fetch the latest weather data
@@ -24,7 +26,7 @@ const WeatherChart: React.FC = () => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const data: WeatherData[] = await response.json();
+      const data: WeatherRecord[] = await response.json();
       setWeatherData(data);
       setError(null); // Clear any previous error
     } catch (error: any) {
@@ -88,10 +90,6 @@ const WeatherChart: React.FC = () => {
         title: {
           display: true,
           text: 'City, Country'
-        },
-        ticks: {
-          autoSkip: true,
-          maxTicksLimit: 6, // Limit the number of ticks on the x-axis to avoid clutter
         },
       },
       y: {

@@ -1,13 +1,25 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using System.ComponentModel;
 
 namespace Atea.Task2.Models
 {
-    public class WeatherData
+    public class WeatherRecord
     {
-        public string City { get; set; }
+        [Key]
+        public Guid Id { get; set; }
+        [Required]
         public string Country { get; set; }
+        [Required]
+        public string City { get; set; }
+        [Required, DisplayName("Minimum Temperature")]
         public double MinTemp { get; set; }
+        [Required, DisplayName("Maximum Temperature")]
         public double MaxTemp { get; set; }
+        [Required, DisplayName("Current Temperature")]
+        public double CurrentTemp { get; set; }
+        public int Humidity { get; set; }
+        [Required]
         public DateTime Timestamp { get; set; }
     }
 
@@ -71,7 +83,7 @@ namespace Atea.Task2.Models
         public int Deg { get; set; }
 
         [JsonPropertyName("gust")]
-        public double Gust { get; set; } // Added this field for gust if present
+        public double Gust { get; set; }
     }
 
     public class Clouds

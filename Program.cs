@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using Atea.Task2.Services;
+using Atea.Task2.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,16 +16,21 @@ builder.Services.AddCors(options =>
         });
 });
 
-// Add services to the container.
+// Configure SQLite database
+builder.Services.AddDbContext<WeatherDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("WeatherDatabase")));
+
+// Add services to the container
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddHttpClient<WeatherService>();
 builder.Services.AddHostedService<WeatherPollingJob>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -31,11 +38,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowReactApp");
-
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
