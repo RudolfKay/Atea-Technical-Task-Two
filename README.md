@@ -3,7 +3,7 @@
 Steps to run:
 
 1) Start the program with "dotnet run" (or run it in debug mode).
-2) Navigate to folder "Atea.Task2\weather-app" within the terminal.
+2) Navigate to project folder "weather-app" within the terminal.
 3) Install necessary packages with "npm install"
 4) Start the front-end app with "npm start".
 5) Wait a few minutes for data to gather.
