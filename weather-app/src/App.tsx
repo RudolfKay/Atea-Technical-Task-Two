@@ -1,5 +1,6 @@
 import WeatherChart from './WeatherChart';
 import React from 'react';
+import './App.css';
 
 const App: React.FC = () => {
   return (
