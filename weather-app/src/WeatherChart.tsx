@@ -1,7 +1,7 @@
+import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, PointElement, LinearScale, CategoryScale } from 'chart.js';
 import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
-import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, PointElement, LinearScale, CategoryScale } from 'chart.js';
 
 ChartJS.register(Title, Tooltip, Legend, LineElement, PointElement, LinearScale, CategoryScale);
 
@@ -23,7 +23,7 @@ const WeatherChart: React.FC = () => {
   // Function to fetch the latest weather data
   const fetchWeatherData = async () => {
     try {
-      const response = await fetch('https://localhost:5000/api/weather/latest'); // Use the correct URL
+      const response = await fetch('https://localhost:5000/api/weather/latest');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
