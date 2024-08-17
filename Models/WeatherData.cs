@@ -16,9 +16,9 @@ public class WeatherRecord
     [Key]
     public Guid Id { get; set; }
     [Required]
-    public string Country { get; set; }
+    public string Country { get; set; } = string.Empty;
     [Required]
-    public string City { get; set; }
+    public string City { get; set; } = string.Empty;
     [Required, DisplayName("Minimum Temperature")]
     public double MinTemp { get; set; }
     [Required, DisplayName("Maximum Temperature")]
@@ -40,31 +40,31 @@ public class WeatherRecord
 public class WeatherResponse
 {
     [JsonPropertyName("coord")]
-    public Coord Coord { get; set; }
+    public Coord Coord { get; set; } = new Coord();
 
     [JsonPropertyName("weather")]
-    public List<Weather> Weather { get; set; }
+    public List<Weather> Weather { get; set; } = new List<Weather>();
 
     [JsonPropertyName("base")]
-    public string Base { get; set; }
+    public string Base { get; set; } = string.Empty;
 
     [JsonPropertyName("main")]
-    public Main Main { get; set; }
+    public Main Main { get; set; } = new Main();
 
     [JsonPropertyName("visibility")]
     public int Visibility { get; set; }
 
     [JsonPropertyName("wind")]
-    public Wind Wind { get; set; }
+    public Wind Wind { get; set; } = new Wind();
 
     [JsonPropertyName("clouds")]
-    public Clouds Clouds { get; set; }
+    public Clouds Clouds { get; set; } = new Clouds();
 
     [JsonPropertyName("dt")]
     public long Dt { get; set; }
 
     [JsonPropertyName("sys")]
-    public Sys Sys { get; set; }
+    public Sys Sys { get; set; } = new Sys();
 
     [JsonPropertyName("timezone")]
     public int Timezone { get; set; }
@@ -73,7 +73,7 @@ public class WeatherResponse
     public int Id { get; set; }
 
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     [JsonPropertyName("cod")]
     public int Cod { get; set; }
@@ -94,13 +94,13 @@ public class Weather
     public int Id { get; set; }
 
     [JsonPropertyName("main")]
-    public string Main { get; set; }
+    public string Main { get; set; } = string.Empty;
 
     [JsonPropertyName("description")]
-    public string Description { get; set; }
+    public string Description { get; set; } = string.Empty;
 
     [JsonPropertyName("icon")]
-    public string Icon { get; set; }
+    public string Icon { get; set; } = string.Empty;
 }
 
 public class Main
@@ -157,7 +157,7 @@ public class Sys
     public int Id { get; set; }
 
     [JsonPropertyName("country")]
-    public string Country { get; set; }
+    public string Country { get; set; } = string.Empty;
 
     [JsonPropertyName("sunrise")]
     public long Sunrise { get; set; }
