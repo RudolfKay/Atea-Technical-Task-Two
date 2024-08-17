@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Atea.Task2.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using Atea.Task2.Context;
 
 namespace Atea.Task2.Controllers
 {
@@ -7,11 +8,11 @@ namespace Atea.Task2.Controllers
     [Route("api/[controller]")]
     public class WeatherController : ControllerBase
     {
-        private readonly string _filePath;
+        private readonly WeatherDbContext _context;
 
-        public WeatherController(IConfiguration config)
+        public WeatherController(WeatherDbContext context)
         {
-            _filePath = config["WeatherApi:DbFilePath"];
+            _context = context;
         }
 
         [HttpGet("latest")]
@@ -19,51 +20,24 @@ namespace Atea.Task2.Controllers
         {
             try
             {
-                // Read file content
-                var lines = await System.IO.File.ReadAllLinesAsync(_filePath);
+                // Retrieve the latest 6 weather data entries, ordered by timestamp (descending)
+                var weatherDataList = await _context.WeatherRecords
+                    .OrderByDescending(w => w.Timestamp)
+                    .Take(6)
+                    .ToListAsync();
 
-                // Ensure that we have enough lines to process
-                if (lines.Length == 0)
+                // Ensure that there is weather data in the database
+                if (weatherDataList == null || !weatherDataList.Any())
                 {
                     return NotFound("No weather data found.");
                 }
 
-                // Parse the lines into WeatherData objects and sort by timestamp
-                var weatherDataList = lines
-                    .Select(line =>
-                    {
-                        var parts = line.Split("||");
-
-                        // Ensure that the line has the expected number of parts (in this case: 12 parts)
-                        if (parts.Length < 12)
-                        {
-                            throw new FormatException("Weather data line is not in the expected format.");
-                        }
-
-                        return new WeatherData
-                        {
-                            Timestamp = DateTime.Parse(parts[0]),
-                            Country = parts[1],
-                            City = parts[2],
-                            MinTemp = double.Parse(parts[4]),
-                            MaxTemp = double.Parse(parts[6])
-                        };
-                    })
-                    .OrderByDescending(data => data.Timestamp)  // Order by the latest timestamp
-                    .Take(6)                                    // Take the top 6 most recent entries
-                    .ToList();
-
-                // Return the weather data list
+                // Return the latest 6 weather data entries
                 return Ok(weatherDataList);
-            }
-            catch (FormatException ex)
-            {
-                // Handle any issues with data parsing
-                return BadRequest($"Data format error: {ex.Message}");
             }
             catch (Exception ex)
             {
-                // Handle general errors (e.g., file not found, etc.)
+                // Handle general errors
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }

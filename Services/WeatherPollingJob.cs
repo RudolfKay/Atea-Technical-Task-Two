@@ -1,9 +1,9 @@
-﻿using Atea.Task2.Services;
+﻿namespace Atea.Task2.Services;
 
 public class WeatherPollingJob : BackgroundService
 {
+    public IServiceProvider Services { get; }
     private readonly ILogger<WeatherPollingJob> _logger;
-    private readonly WeatherService _weatherService;
     private static readonly List<(string Country, string City, double Lat, double Lon)> locations = new()
     {
         ("US", "New York", 40.7128, -74.0060),
@@ -14,10 +14,10 @@ public class WeatherPollingJob : BackgroundService
         ("GB", "Manchester", 53.4808, -2.2426)
     };
 
-    public WeatherPollingJob(ILogger<WeatherPollingJob> logger, WeatherService weatherService)
+    public WeatherPollingJob(IServiceProvider services, ILogger<WeatherPollingJob> logger)
     {
+        Services = services;
         _logger = logger;
-        _weatherService = weatherService;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -28,8 +28,12 @@ public class WeatherPollingJob : BackgroundService
         {
             _logger.LogInformation("Polling weather data...");
             
-            // Pass the CancellationToken to the PollWeatherData method
-            await _weatherService.PollWeatherData(locations, stoppingToken);
+            // Initialize WeatherService class
+            var weatherService = Services.CreateScope().ServiceProvider
+                                                 .GetRequiredService<IWeatherService>();
+
+            // Begin polling and storing weather data
+            await weatherService.PollWeatherData(locations, stoppingToken);
 
             // Wait for 1 minute before polling again, check cancellation token
             try
