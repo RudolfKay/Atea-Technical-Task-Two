@@ -1,5 +1,12 @@
 ﻿namespace Atea.Task2.Services;
 
+/// <summary>
+/// A background service that periodically polls weather data for a predefined list of locations.
+/// </summary>
+/// <remarks>
+/// This service runs in the background and triggers every minute to fetch and store weather data.
+/// It uses the <see cref="IWeatherService"/> to perform the polling and data storage.
+/// </remarks>
 public class WeatherPollingJob : BackgroundService
 {
     public IServiceProvider Services { get; }
@@ -14,12 +21,22 @@ public class WeatherPollingJob : BackgroundService
         ("GB", "Manchester", 53.4808, -2.2426)
     };
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="WeatherPollingJob"/> class.
+    /// </summary>
+    /// <param name="services">The service provider for dependency injection.</param>
+    /// <param name="logger">The logger for logging messages and errors.</param>
     public WeatherPollingJob(IServiceProvider services, ILogger<WeatherPollingJob> logger)
     {
         Services = services;
         _logger = logger;
     }
 
+    /// <summary>
+    /// Executes the background service that polls weather data periodically.
+    /// </summary>
+    /// <param name="stoppingToken">A cancellation token to monitor for service stopping.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         _logger.LogInformation("Weather polling service is starting.");
@@ -28,14 +45,11 @@ public class WeatherPollingJob : BackgroundService
         {
             _logger.LogInformation("Polling weather data...");
             
-            // Initialize WeatherService class
             var weatherService = Services.CreateScope().ServiceProvider
-                                                 .GetRequiredService<IWeatherService>();
+                                         .GetRequiredService<IWeatherService>();
 
-            // Begin polling and storing weather data
             await weatherService.PollWeatherData(locations, stoppingToken);
 
-            // Wait for 1 minute before polling again, check cancellation token
             try
             {
                 await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);

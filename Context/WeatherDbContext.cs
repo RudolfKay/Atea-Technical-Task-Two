@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Atea.Task2.Models;
 
+#nullable disable
+
 namespace Atea.Task2.Context
 {
     public class WeatherDbContext : DbContext

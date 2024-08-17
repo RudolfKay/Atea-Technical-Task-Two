@@ -4,11 +4,9 @@ using Atea.Task2.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configure SQLite database
 builder.Services.AddDbContext<WeatherDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("WeatherDatabase")));
 
-// Add CORS services
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp",
@@ -20,7 +18,6 @@ builder.Services.AddCors(options =>
         });
 });
 
-// Add services to the container
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -30,7 +27,6 @@ builder.Services.AddHostedService<WeatherPollingJob>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
