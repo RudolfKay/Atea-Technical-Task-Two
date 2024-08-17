@@ -4,8 +4,8 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 # User-specific files
-Data/weather.db-shm
-Data/weather.db-wal
+/Data/weather.db-shm
+/Data/weather.db-wal
 weatherdata.txt
 *.rsuser
 *.suo
