@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using Atea.Task2.Interfaces;
 using Atea.Task2.Services;
 using Atea.Task2.Context;
+using Atea.Task2.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +24,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IWeatherService, WeatherService>();
+builder.Services.AddScoped<IWeatherRepository, WeatherRepository>();
+builder.Services.AddHttpClient<IWeatherService, WeatherService>();
 builder.Services.AddHostedService<WeatherPollingJob>();
 
 var app = builder.Build();

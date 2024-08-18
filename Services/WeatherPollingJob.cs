@@ -1,4 +1,6 @@
-﻿namespace Atea.Task2.Services;
+﻿using Atea.Task2.Interfaces;
+
+namespace Atea.Task2.Services;
 
 /// <summary>
 /// A background service that periodically polls weather data for a predefined list of locations.
