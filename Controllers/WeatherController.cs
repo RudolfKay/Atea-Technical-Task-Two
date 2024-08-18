@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
-using Atea.Task2.Context;
+using Atea.Task2.Interfaces;
+using Atea.Task2.Repositories;
 
 namespace Atea.Task2.Controllers;
 
@@ -8,11 +9,11 @@ namespace Atea.Task2.Controllers;
 [Route("api/[controller]")]
 public class WeatherController : ControllerBase
 {
-    private readonly WeatherDbContext _context;
+    private readonly IWeatherRepository _weatherRepo;
 
-    public WeatherController(WeatherDbContext context)
+    public WeatherController(IWeatherRepository weatherRepo)
     {
-        _context = context;
+        _weatherRepo = weatherRepo;
     }
 
     /// <summary>
@@ -36,10 +37,7 @@ public class WeatherController : ControllerBase
         try
         {
             // Retrieve the latest 6 weather data entries, ordered by timestamp (descending)
-            var weatherDataList = await _context.WeatherRecords
-                .OrderByDescending(w => w.Timestamp)
-                .Take(6)
-                .ToListAsync();
+            var weatherDataList = await _weatherRepo.GetLatestWeatherRecordsAsync(6);
 
             // Ensure that there is weather data in the database
             if (weatherDataList == null || !weatherDataList.Any())

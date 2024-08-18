@@ -23,7 +23,7 @@ const WeatherChart: React.FC = () => {
   // Function to fetch the latest weather data
   const fetchWeatherData = async () => {
     try {
-      const response = await fetch('https://localhost:5000/api/weather/latest');
+      const response = await fetch(`${process.env.REACT_APP_API_URL}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
