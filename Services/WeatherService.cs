@@ -4,6 +4,9 @@ using System.Text.Json;
 
 namespace Atea.Task2.Services;
 
+/// <summary>
+/// Service responsible for polling weather data from an external API and saving it to a database.
+/// </summary>
 public class WeatherService : IWeatherService
 {
     private readonly IWeatherRepository _weatherRepo;
@@ -21,6 +24,12 @@ public class WeatherService : IWeatherService
         _logger = logger;
     }
 
+    /// <summary>
+    /// Polls weather data for a list of locations and saves it to the database.
+    /// </summary>
+    /// <param name="locations">List of locations with country, city, latitude, and longitude.</param>
+    /// <param name="cancellationToken">Cancellation token to allow operation cancellation.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
     public async Task PollWeatherData(List<(string Country, string City, double Lat, double Lon)> locations, CancellationToken cancellationToken)
     {
         foreach (var location in locations)
@@ -39,6 +48,14 @@ public class WeatherService : IWeatherService
         }
     }
 
+    /// <summary>
+    /// Retrieves weather data from the API for the specified latitude and longitude.
+    /// </summary>
+    /// <param name="lat">Latitude of the location.</param>
+    /// <param name="lon">Longitude of the location.</param>
+    /// <returns>A task representing the asynchronous operation, with a <see cref="WeatherResponse"/> as the result.</returns>
+    /// <exception cref="HttpRequestException">Thrown when the HTTP request fails.</exception>
+    /// <exception cref="JsonException">Thrown when deserialization fails.</exception>
     private async Task<WeatherResponse> GetWeatherDataAsync(double lat, double lon)
     {
         var url = $"{_openWeatherUrl}lat={lat}&lon={lon}&appid={_apiKey}";
@@ -53,6 +70,13 @@ public class WeatherService : IWeatherService
         return JsonSerializer.Deserialize<WeatherResponse>(jsonResponse) ?? throw new JsonException("Failed to deserialize weather data.");
     }
 
+    /// <summary>
+    /// Saves the retrieved weather data to the database.
+    /// </summary>
+    /// <param name="country">Country of the location.</param>
+    /// <param name="city">City of the location.</param>
+    /// <param name="weatherData">Weather data to be saved.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
     private async Task SaveWeatherDataToDatabaseAsync(string country, string city, WeatherResponse weatherData)
     {
         if (weatherData?.Main == null)
