@@ -10,4 +10,11 @@ Steps to run:
 6) If not open already, navigate to "localhost:3000" on your browser of choice.
 7) Enjoy!
 
- The graphs displaying weather min/max temps and timestamps by location refresh every minute (both BE, and FE update requests) to provide the most current data from OpenWeatherMap.org
+The graphs displaying weather min/max temps and timestamps by location refresh every minute (both BE, and FE update requests) to provide the most current data from OpenWeatherMap.org
+
+What would I improve next:
+1. Refactor job/service to be handled by an azure function.
+2. Implement unit tests using xUnit/nUnit (attempted to add test project but cut short by time and dependency issues).
+3. If not refactor to azure function, then implement auto-retry functionality for the polling job.
+4. UI, perhaps add more data (humidity and current temperature data already available for the front-end).
+5. Cloud storage. 🌈
