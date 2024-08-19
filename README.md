@@ -17,4 +17,7 @@ What would I improve next:
 2. Implement unit tests using xUnit/nUnit (attempted to add test project but cut short by time and dependency issues).
 3. If not refactor to azure function, then implement auto-retry functionality for the polling job.
 4. UI, perhaps add more data (humidity and current temperature data already available for the front-end).
-5. Cloud storage. 🌈
+5. Add more validation.
+6. Use custom errors.
+7. Add Serilog or equivalent.
+8. Cloud storage. 🌈
