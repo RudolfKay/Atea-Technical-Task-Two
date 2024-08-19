@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Atea.Task2.Interfaces;
-using Atea.Task2.Repositories;
 
 namespace Atea.Task2.Controllers;
 
+/// <summary>
+/// Controller for managing weather data endpoints.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 public class WeatherController : ControllerBase
@@ -17,16 +18,13 @@ public class WeatherController : ControllerBase
     }
 
     /// <summary>
-    /// Retrieves the latest 6 weather data entries from the database, ordered by timestamp in descending order.
+    /// Retrieves the latest 6 weather records from the database.
     /// </summary>
     /// <remarks>
-    /// This endpoint queries the database for the most recent 6 weather data records.
-    /// It returns an HTTP 200 OK response with the data if successful.
-    /// If no data is found, it returns an HTTP 404 Not Found response.
-    /// If an internal error occurs, it returns an HTTP 500 Internal Server Error response.
+    /// Queries the database for the most recent 6 weather data entries, ordered by timestamp in descending order.
     /// </remarks>
     /// <returns>
-    /// A list of the latest 6 weather data entries as WeatherRecord, or an appropriate HTTP error response.
+    /// A list of the latest 6 weather records, or an appropriate HTTP error response.
     /// </returns>
     /// <response code="200">Returns the latest 6 weather data entries.</response>
     /// <response code="404">If no weather data is found.</response>

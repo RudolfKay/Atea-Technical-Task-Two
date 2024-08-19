@@ -23,11 +23,6 @@ public class WeatherPollingJob : BackgroundService
         ("GB", "Manchester", 53.4808, -2.2426)
     };
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="WeatherPollingJob"/> class.
-    /// </summary>
-    /// <param name="services">The service provider for dependency injection.</param>
-    /// <param name="logger">The logger for logging messages and errors.</param>
     public WeatherPollingJob(IServiceProvider services, ILogger<WeatherPollingJob> logger)
     {
         Services = services;
