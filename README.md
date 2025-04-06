@@ -1,5 +1,3 @@
-# Atea Task 2
-
 Steps to run:
 
 1) Start the program with "dotnet run" (or run it in debug mode).
